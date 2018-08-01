@@ -31,7 +31,7 @@ public class OkHttpClientImpl implements IHttpClient {
 
         Request okRequest = builder.build();
         // 执行 okRequest
-        return  execute(okRequest);
+        return execute(okRequest);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class OkHttpClientImpl implements IHttpClient {
         builder.url(request.getUrl()).post(body);
 
         Request okRequest = builder.build();
-        return  execute(okRequest);
+        return execute(okRequest);
     }
 
     @NonNull

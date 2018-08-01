@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
-import com.thunderhou.mytaxi.MainActivity;
+import com.thunderhou.mytaxi.main.view.MainActivity;
 import com.thunderhou.mytaxi.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -25,14 +25,15 @@ public class SplashActivity extends AppCompatActivity {
             anim1.start();
         }
 
+        /**
+         * 延时 3 秒然后跳转到 main 页面
+         */
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                SplashActivity.this.finish();
-
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                finish();
             }
-        }, 3000);
+        }, 3000) ;
     }
 }

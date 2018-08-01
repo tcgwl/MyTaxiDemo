@@ -2,6 +2,7 @@ package com.thunderhou.mytaxi.common.http.impl;
 
 import com.google.gson.Gson;
 import com.thunderhou.mytaxi.common.http.IRequest;
+import com.thunderhou.mytaxi.common.http.api.API;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +20,8 @@ public class BaseRequest implements IRequest {
         this.url = url;
         header = new HashMap<>();
         body = new HashMap<>();
-        header.put("Application-Id", "myTaxiID");
-        header.put("API-Key", "myTaxiKey");
+        header.put("X-Bmob-Application-Id", API.Config.getAppId());
+        header.put("X-Bmob-REST-API-Key", API.Config.getAppKey());
     }
 
     @Override
