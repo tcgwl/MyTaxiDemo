@@ -1,9 +1,8 @@
-package com.thunderhou.mytaxi.main.presenter;
+package com.thunderhou.mytaxi.main.model;
 
 import com.thunderhou.mytaxi.common.lbs.LocationInfo;
 
-public interface IMainPresenter {
-    void loginByToken();
+public interface IMainManager {
 
     /**
      * 获取附近司机
@@ -13,7 +12,7 @@ public interface IMainPresenter {
     void fetchNearDrivers(double latitude, double longitude);
 
     /**
-     * 上报当前位置
+     * 上报位置
      * @param locationInfo
      */
     void updateLocationToServer(LocationInfo locationInfo);

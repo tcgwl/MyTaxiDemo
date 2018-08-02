@@ -61,12 +61,19 @@ public class RxBus {
                     @Override
                     public void call(Object data) {
                         Log.d(TAG, "chainProcess start");
-                        for (Object subscriber : subscribers) {
-                            // 扫描注解，将数据发送到注册的对象的标记方法
-                            callMethodByAnnotiation(subscriber, data);
-                        }
+                        if (data == null)
+                            return;
+
+                        send(data);
                     }
                 });
+    }
+
+    public void send(Object data) {
+        for (Object subscriber : subscribers) {
+            // 扫描注解，将数据发送到注册的对象的标记方法
+            callMethodByAnnotiation(subscriber, data);
+        }
     }
 
     /**
@@ -94,4 +101,5 @@ public class RxBus {
             }
         }
     }
+
 }

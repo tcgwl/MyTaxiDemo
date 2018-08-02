@@ -4,7 +4,7 @@ package com.thunderhou.mytaxi.common.lbs;
  * 位置信息：实体类
  */
 public class LocationInfo {
-    private int id;
+    private String key;
     private String  name;
     private double  latitude;
     private double longitude;
@@ -23,12 +23,12 @@ public class LocationInfo {
         this.rotation = rotation;
     }
 
-    public int getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {

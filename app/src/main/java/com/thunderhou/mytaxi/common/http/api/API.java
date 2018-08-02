@@ -15,10 +15,14 @@ public class API {
     public static final String LOGIN = "/f34e28da5816433d/auth";
     // token 登录
     public static final String LOGIN_BY_TOKEN = "/f34e28da5816433d/login";
-
     // 检查用户是否存在
     public static String CHECK_USER_EXIST =
             "/f34e28da5816433d/isUserExist?phone=${phone}";
+    //获取附近司机
+    public static final String GET_NEAR_DRIVERS = "/f34e28da5816433d/getNearDrivers?latitude=${latitude}&longitude=${longitude}";
+    // 上报当前位置
+    public static final String UPLOAD_LOCATION = "/f34e28da5816433d/updateUserLocation";
+
 
     /**
      *  配置域名信息
