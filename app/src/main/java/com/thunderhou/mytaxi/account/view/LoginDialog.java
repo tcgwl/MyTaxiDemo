@@ -15,10 +15,12 @@ import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.presenter.ILoginDialogPresenter;
 import com.thunderhou.mytaxi.account.presenter.LoginDialogPresenterImpl;
+import com.thunderhou.mytaxi.common.databus.RxBus;
 import com.thunderhou.mytaxi.common.http.IHttpClient;
 import com.thunderhou.mytaxi.common.http.impl.OkHttpClientImpl;
 import com.thunderhou.mytaxi.common.storage.SharedPreferencesDao;
 import com.thunderhou.mytaxi.common.util.ToastUtil;
+import com.thunderhou.mytaxi.main.view.MainActivity;
 
 
 /**
@@ -34,8 +36,9 @@ public class LoginDialog extends Dialog implements ILoginView {
     private TextView mTips;
     private String mPhoneStr;
     private ILoginDialogPresenter mPresenter;
+    private MainActivity mainActivity;
 
-    public LoginDialog(Context context, String phone) {
+    public LoginDialog(MainActivity context, String phone) {
         this(context, R.style.Dialog);
         mPhoneStr = phone;
         IHttpClient httpClient = new OkHttpClientImpl();
@@ -44,6 +47,7 @@ public class LoginDialog extends Dialog implements ILoginView {
                         SharedPreferencesDao.FILE_ACCOUNT);
         IAccountManager accountManager = new AccountManagerImpl(httpClient, dao);
         mPresenter = new LoginDialogPresenterImpl(this, accountManager);
+        this.mainActivity = context;
     }
 
     public LoginDialog(Context context, int theme) {
@@ -58,6 +62,15 @@ public class LoginDialog extends Dialog implements ILoginView {
         View root = inflater.inflate(R.layout.dialog_login_input, null);
         setContentView(root);
         initViews();
+        //注册 presenter
+        RxBus.getInstance().register(mPresenter);
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        // 注销 presenter
+        RxBus.getInstance().unRegister(mPresenter);
     }
 
     private void initViews() {
@@ -121,6 +134,7 @@ public class LoginDialog extends Dialog implements ILoginView {
         mTips.setText(getContext().getString(R.string.login_suc));
         ToastUtil.show(getContext(), getContext().getString(R.string.login_suc));
         dismiss();
+        mainActivity.showLoginSuc();
     }
 
     /**

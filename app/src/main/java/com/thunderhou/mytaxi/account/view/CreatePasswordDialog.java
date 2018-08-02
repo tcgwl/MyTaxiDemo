@@ -15,11 +15,12 @@ import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.presenter.CreatePasswordDialogPresenterImpl;
 import com.thunderhou.mytaxi.account.presenter.ICreatePasswordDialogPresenter;
+import com.thunderhou.mytaxi.common.databus.RxBus;
 import com.thunderhou.mytaxi.common.http.IHttpClient;
 import com.thunderhou.mytaxi.common.http.impl.OkHttpClientImpl;
 import com.thunderhou.mytaxi.common.storage.SharedPreferencesDao;
 import com.thunderhou.mytaxi.common.util.ToastUtil;
-
+import com.thunderhou.mytaxi.main.view.MainActivity;
 
 
 /**
@@ -37,8 +38,9 @@ public class CreatePasswordDialog extends Dialog implements ICreatePasswordDialo
     private TextView mTips;
     private String mPhoneStr;
     private ICreatePasswordDialogPresenter mPresenter;
+    private MainActivity mainActivity;
 
-    public CreatePasswordDialog(Context context, String phone) {
+    public CreatePasswordDialog(MainActivity context, String phone) {
         this(context, R.style.Dialog);
         // 上一个页面传来的手机号
         mPhoneStr = phone;
@@ -48,6 +50,7 @@ public class CreatePasswordDialog extends Dialog implements ICreatePasswordDialo
                         SharedPreferencesDao.FILE_ACCOUNT);
         IAccountManager accountManager =  new AccountManagerImpl(httpClient, dao);
         mPresenter = new CreatePasswordDialogPresenterImpl(this, accountManager);
+        this.mainActivity = context;
     }
 
     public CreatePasswordDialog(Context context, int theme) {
@@ -62,6 +65,15 @@ public class CreatePasswordDialog extends Dialog implements ICreatePasswordDialo
         View root = inflater.inflate(R.layout.dialog_create_pw, null);
         setContentView(root);
         initViews();
+        //注册 presenter
+        RxBus.getInstance().register(mPresenter);
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        // 注销 presenter
+        RxBus.getInstance().unRegister(mPresenter);
     }
 
     private void initViews() {
@@ -149,12 +161,12 @@ public class CreatePasswordDialog extends Dialog implements ICreatePasswordDialo
         showOrHideLoading(false);
         dismiss();
         ToastUtil.show(getContext(), getContext().getString(R.string.login_suc));
+        mainActivity.showLoginSuc();
     }
 
     private void showLoginFail() {
         dismiss();
-        ToastUtil.show(getContext(),
-                getContext().getString(R.string.error_server));
+        ToastUtil.show(getContext(), getContext().getString(R.string.error_server));
     }
 
     private void showServerError() {

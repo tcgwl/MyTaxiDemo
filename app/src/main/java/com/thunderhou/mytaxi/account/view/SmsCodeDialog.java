@@ -2,6 +2,7 @@ package com.thunderhou.mytaxi.account.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -16,10 +17,12 @@ import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.presenter.ISmsCodeDialogPresenter;
 import com.thunderhou.mytaxi.account.presenter.SmsCodeDialogPresenterImpl;
+import com.thunderhou.mytaxi.common.databus.RxBus;
 import com.thunderhou.mytaxi.common.http.IHttpClient;
 import com.thunderhou.mytaxi.common.http.impl.OkHttpClientImpl;
 import com.thunderhou.mytaxi.common.storage.SharedPreferencesDao;
 import com.thunderhou.mytaxi.common.util.ToastUtil;
+import com.thunderhou.mytaxi.main.view.MainActivity;
 
 /**
  * 验证码框
@@ -34,6 +37,7 @@ public class SmsCodeDialog extends Dialog implements ISmsCodeDialogView  {
     private View mErrorView;
     private TextView mPhoneTv;
     private ISmsCodeDialogPresenter mPresenter;
+    private MainActivity mainActivity;
 
     /**
      *  验证码倒计时
@@ -57,7 +61,7 @@ public class SmsCodeDialog extends Dialog implements ISmsCodeDialogView  {
         }
     };
 
-    public SmsCodeDialog(Context context, String phone) {
+    public SmsCodeDialog(MainActivity context, String phone) {
         this(context, R.style.Dialog);
         // 上一个界面传来的手机号
         this.mPhone = phone;
@@ -67,6 +71,7 @@ public class SmsCodeDialog extends Dialog implements ISmsCodeDialogView  {
                         SharedPreferencesDao.FILE_ACCOUNT);
         IAccountManager iAccountManager = new AccountManagerImpl(httpClient, dao);
         mPresenter = new SmsCodeDialogPresenterImpl(this, iAccountManager);
+        this.mainActivity = context;
     }
 
     public SmsCodeDialog(Context context, int themeResId) {
@@ -94,6 +99,16 @@ public class SmsCodeDialog extends Dialog implements ISmsCodeDialogView  {
         mErrorView.setVisibility(View.GONE);
         initListeners();
         requestSendSmsCode();
+
+        // 注册 Presenter
+        RxBus.getInstance().register(mPresenter);
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        // 注销 Presenter
+        RxBus.getInstance().unRegister(mPresenter);
     }
 
     @Override
@@ -184,15 +199,27 @@ public class SmsCodeDialog extends Dialog implements ISmsCodeDialogView  {
     public void showUserExist(boolean exist) {
         mLoading.setVisibility(View.GONE);
         mErrorView.setVisibility(View.GONE);
-        dismiss();
+//        dismiss();
         if (!exist) {
             // 用户不存在,进入注册
-            CreatePasswordDialog dialog = new CreatePasswordDialog(getContext(), mPhone);
+            CreatePasswordDialog dialog = new CreatePasswordDialog(mainActivity, mPhone);
             dialog.show();
+            dialog.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    dismiss();
+                }
+            });
         } else {
             // 用户存在,进入登录
-            LoginDialog dialog = new LoginDialog(getContext(), mPhone);
+            LoginDialog dialog = new LoginDialog(mainActivity, mPhone);
             dialog.show();
+            dialog.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    dismiss();
+                }
+            });
         }
     }
 

@@ -2,6 +2,7 @@ package com.thunderhou.mytaxi.account.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,14 +13,17 @@ import android.widget.EditText;
 
 import com.thunderhou.mytaxi.R;
 import com.thunderhou.mytaxi.common.util.FormatUtil;
+import com.thunderhou.mytaxi.main.view.MainActivity;
 
 public class PhoneInputDialog extends Dialog {
     private View mRoot;
     private EditText mPhoneEditText;
     private Button mNextButton;
+    private MainActivity mainActivity;
 
-    public PhoneInputDialog(Context context) {
+    public PhoneInputDialog(MainActivity context) {
         this(context, R.style.Dialog);
+        mainActivity = context;
     }
 
     public PhoneInputDialog(Context context, int theme) {
@@ -62,11 +66,15 @@ public class PhoneInputDialog extends Dialog {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PhoneInputDialog.this.dismiss();
-
-                String phoneNum = mPhoneEditText.getText().toString();
-                SmsCodeDialog dialog = new SmsCodeDialog(getContext(), phoneNum);
+                String phone =  mPhoneEditText.getText().toString();
+                SmsCodeDialog dialog = new SmsCodeDialog(mainActivity, phone);
                 dialog.show();
+                dialog.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        PhoneInputDialog.this.dismiss();
+                    }
+                });
             }
         });
 

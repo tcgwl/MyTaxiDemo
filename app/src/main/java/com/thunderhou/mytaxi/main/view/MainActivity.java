@@ -1,5 +1,6 @@
 package com.thunderhou.mytaxi.main.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -8,6 +9,7 @@ import com.thunderhou.mytaxi.R;
 import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.view.PhoneInputDialog;
+import com.thunderhou.mytaxi.common.databus.RxBus;
 import com.thunderhou.mytaxi.common.http.IHttpClient;
 import com.thunderhou.mytaxi.common.http.impl.OkHttpClientImpl;
 import com.thunderhou.mytaxi.common.storage.SharedPreferencesDao;
@@ -37,7 +39,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                         SharedPreferencesDao.FILE_ACCOUNT);
         IAccountManager manager = new AccountManagerImpl(httpClient, dao);
         mPresenter = new MainPresenterImpl(this, manager);
+        RxBus.getInstance().register(mPresenter);
         mPresenter.loginByToken();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.getInstance().unRegister(mPresenter);
     }
 
     @Override
@@ -59,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     private void showPhoneInputDialog() {
         PhoneInputDialog dialog = new PhoneInputDialog(this);
         dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                RxBus.getInstance().register(mPresenter);
+            }
+        });
+        RxBus.getInstance().unRegister(mPresenter);
     }
 
     @Override

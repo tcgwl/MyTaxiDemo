@@ -1,21 +1,52 @@
 package com.thunderhou.mytaxi.account.presenter;
 
-import android.os.Handler;
-import android.os.Message;
-
 import com.thunderhou.mytaxi.account.model.IAccountManager;
+import com.thunderhou.mytaxi.account.model.response.LoginResponse;
+import com.thunderhou.mytaxi.account.model.response.RegisterResponse;
 import com.thunderhou.mytaxi.account.view.ICreatePasswordDialogView;
-
-import java.lang.ref.WeakReference;
+import com.thunderhou.mytaxi.common.databus.RegisterBus;
 
 public class CreatePasswordDialogPresenterImpl implements ICreatePasswordDialogPresenter {
     private ICreatePasswordDialogView view;
     private IAccountManager accountManager;
 
-    /**
-     * 接收子线程消息的 Handler
-     */
-    static class MyHandler extends Handler {
+    @RegisterBus
+    public void onRegisterResponse(RegisterResponse registerResponse) {
+        // 处理UI 变化
+        switch (registerResponse.getCode()) {
+            case IAccountManager.REGISTER_SUC:
+                // 注册成功
+                view.showRegisterSuc();
+                break;
+            case IAccountManager.LOGIN_SUC:
+                // 登录成功
+                view.showLoginSuc();
+                break;
+            case IAccountManager.SERVER_FAIL:
+                // 服务器错误
+                view.showError(IAccountManager.SERVER_FAIL, "");
+                break;
+        }
+
+    }
+
+    @RegisterBus
+    public void onLoginResponse(LoginResponse loginResponse) {
+        // 处理UI 变化
+        switch (loginResponse.getCode()) {
+            case IAccountManager.LOGIN_SUC:
+                // 登录成功
+                view.showLoginSuc();
+                break;
+            case IAccountManager.SERVER_FAIL:
+                // 服务器错误
+                view.showError(IAccountManager.SERVER_FAIL, "");
+                break;
+        }
+
+    }
+
+    /*static class MyHandler extends Handler {
         WeakReference<CreatePasswordDialogPresenterImpl> codeDialogRef;
 
         public MyHandler(CreatePasswordDialogPresenterImpl presenter) {
@@ -45,7 +76,7 @@ public class CreatePasswordDialogPresenterImpl implements ICreatePasswordDialogP
             }
 
         }
-    }
+    }*/
 
     /**
      * 注入 view 和 accountManager 对象
@@ -57,7 +88,7 @@ public class CreatePasswordDialogPresenterImpl implements ICreatePasswordDialogP
                                              IAccountManager accountManager) {
         this.view = view;
         this.accountManager = accountManager;
-        accountManager.setHandler(new MyHandler(this));
+//        accountManager.setHandler(new MyHandler(this));
     }
 
     /**

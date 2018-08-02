@@ -1,7 +1,5 @@
 package com.thunderhou.mytaxi.account.model;
 
-import android.os.Handler;
-
 /**
  * 帐号相关业务逻辑抽象
  */
@@ -31,7 +29,7 @@ public interface IAccountManager {
     // 首次使用
     static final int FIRST_USE = -7;
 
-    void setHandler(Handler handler);
+//    void setHandler(Handler handler);
     /**
      *  下发验证码
      */

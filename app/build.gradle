@@ -29,4 +29,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.7.0'
     implementation 'com.google.code.gson:gson:2.3.1'
     implementation 'com.github.liuguangli:VerificationCodeInput:1.3'
+    implementation 'io.reactivex:rxjava:1.0.14'
+    implementation 'io.reactivex:rxandroid:1.0.1'
 }
