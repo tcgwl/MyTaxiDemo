@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dalimao.mytaxi.R;
 import com.thunderhou.mytaxi.MyTaxiApplication;
-import com.thunderhou.mytaxi.R;
 import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.presenter.CreatePasswordDialogPresenterImpl;

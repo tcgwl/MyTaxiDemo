@@ -8,8 +8,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
+import com.dalimao.mytaxi.R;
 import com.thunderhou.mytaxi.main.view.MainActivity;
-import com.thunderhou.mytaxi.R;
 
 public class SplashActivity extends AppCompatActivity {
 

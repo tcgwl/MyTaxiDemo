@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.thunderhou.mytaxi.R;
+import com.dalimao.mytaxi.R;
 import com.thunderhou.mytaxi.common.util.FormatUtil;
 import com.thunderhou.mytaxi.main.view.MainActivity;
 

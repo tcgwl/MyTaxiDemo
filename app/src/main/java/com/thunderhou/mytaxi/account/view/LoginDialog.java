@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dalimao.mytaxi.R;
 import com.thunderhou.mytaxi.MyTaxiApplication;
-import com.thunderhou.mytaxi.R;
 import com.thunderhou.mytaxi.account.model.AccountManagerImpl;
 import com.thunderhou.mytaxi.account.model.IAccountManager;
 import com.thunderhou.mytaxi.account.presenter.ILoginDialogPresenter;
@@ -21,7 +21,6 @@ import com.thunderhou.mytaxi.common.http.impl.OkHttpClientImpl;
 import com.thunderhou.mytaxi.common.storage.SharedPreferencesDao;
 import com.thunderhou.mytaxi.common.util.ToastUtil;
 import com.thunderhou.mytaxi.main.view.MainActivity;
-
 
 /**
  * 登录框
