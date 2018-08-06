@@ -1,9 +1,5 @@
 package com.thunderhou.mytaxi.account.model.response;
 
-/**
- * Created by liuguangli on 17/5/6.
- */
-
 public class Account {
     private String token;
     private String uid;
